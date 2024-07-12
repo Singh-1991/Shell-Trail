@@ -6,11 +6,14 @@ pipeline {
     }
 
     stages {
-
+        stage ('Code CheckOut'){
+            git branch: 'main', credentialsId: 'GitHub_Credentials', url: 'https://github.com/Singh-1991/Shell-Trail.git'
+        }
+        
         stage('Setup ENV ') {
             steps {
                 sh "aws --version"
-                withCredentials([usernamePassword(credentialsId: 'aws-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                withCredentials([usernamePassword(credentialsId: 'AWS-Credentials', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
                 sh """
                     export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
                     export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
