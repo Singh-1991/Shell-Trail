@@ -1,43 +1,48 @@
 pipeline {
-  agent any
+    agent any
 
-  stages {
-    stage('ENV setup') {
-      sh "aws --version"
-      // Below step uses the secrets from Jenkins secrets.
-      withCredentials([usernamePassword(credentialsId: 'aws-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-      sh """
-           export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-           export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-      """
-    }
-    
-    stage('CheckOut Code'){
-      git URL: 
+    options {
+        timeout(time: 1, unit: 'HOURS')
     }
 
-    [3:58 PM] Balaji, Siva Kumar S
-stage('Validate Hash') {
+    stages {
+
+        stage('Setup ENV ') {
             steps {
-                container('awscli-image') {
-                    checkout scm  // Checkout the SCM to get the 'jenkins_pipeline' directory
- 
-                    dir("${env.WORKSPACE}/jenkins_pipeline") {
-                        sh "chmod +x verify_hash.sh"
-                        sh "./verify_hash.sh"
-                    }
+                sh "aws --version"
+                withCredentials([usernamePassword(credentialsId: 'aws-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                sh """
+                    export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+                    export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+                """
                 }
             }
+        }
+
+
+        stage('Validate Hash') {
+            steps {
+                checkout scm // Checkout the repository into the workspace
+ 
+                    // Enter the checked-out repository directory
+                    dir("${env.WORKSPACE}/jenkins_pipeline") {
+                        sh "ls -l" // List files in the repository directory.
+                        sh "./ss4mm.sh" // Assuming ss4mm.sh is in the repository, execute it.
+                    }
+                }
+
             post {
+                
                 success {
                     echo "Verification successful. Proceeding with further stages."
                 }
+
                 failure {
                     echo "Verification failed. Failing the job."
                     currentBuild.result = 'FAILURE'
                     error "Verification failed."
                 }
             }
- 
         }
+    }
 }
