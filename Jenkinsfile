@@ -45,8 +45,10 @@ pipeline {
 
                 failure {
                     echo "Verification failed. Failing the job."
-                    currentBuild.result = 'FAILURE'
-                    error "Verification failed."
+                    script {
+                        currentBuild.result = 'FAILURE'
+                        error "Verification failed."
+                    }
                 }
             }
         }
