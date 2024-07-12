@@ -28,9 +28,10 @@ pipeline {
                 checkout scm // Checkout the repository into the workspace
  
                     // Enter the checked-out repository directory
-                    dir("${env.WORKSPACE}/jenkins_pipeline") {
-                        sh "ls -l" // List files in the repository directory.
-                        sh "./ss4mm.sh" // Assuming ss4mm.sh is in the repository, execute it.
+                dir("${env.WORKSPACE}/jenkins_pipeline") {
+                    sh "ls -l" // List files in the repository directory.
+                    sh "chmod +x abc.sh"
+                    sh "./abc.sh" // Assuming abc.sh is in the repository, execute it.
                     }
                 }
 
@@ -44,6 +45,17 @@ pipeline {
                     echo "Verification failed. Failing the job."
                     currentBuild.result = 'FAILURE'
                     error "Verification failed."
+                }
+            }
+        }
+
+        stage('CleanUp Workspace') {
+            steps {
+                checkout scm // Checkout the repository into the workspace
+ 
+                    // Enter the checked-out repository directory
+                dir("${env.WORKSPACE}") {
+                    sh "rm -Rf *"
                 }
             }
         }
