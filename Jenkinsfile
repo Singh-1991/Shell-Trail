@@ -6,10 +6,12 @@ pipeline {
     }
 
     stages {
-        stage ('Code CheckOut'){
-            git branch: 'main', credentialsId: 'GitHub_Credentials', url: 'https://github.com/Singh-1991/Shell-Trail.git'
+        stage('Code CheckOut') {
+            steps{
+                git branch: 'main', credentialsId: 'GitHub_Credentials', url: 'https://github.com/Singh-1991/Shell-Trail.git'
+            }
         }
-        
+            
         stage('Setup ENV ') {
             steps {
                 sh "aws --version"
