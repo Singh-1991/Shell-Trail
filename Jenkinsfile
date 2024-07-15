@@ -32,8 +32,8 @@ pipeline {
                     // Enter the checked-out repository directory
                 dir("${env.WORKSPACE}/jenkins_pipeline") {
                     sh "ls -l" // List files in the repository directory.
-                    sh "chmod +x def.sh"
-                    sh "./def.sh" // Assuming abc.sh is in the repository, execute it.
+                    sh "chmod +x abc.sh"
+                    sh "./abc.sh" // Assuming abc.sh is in the repository, execute it.
                     }
                 }
 
