@@ -31,10 +31,16 @@ pipeline {
  
                     // Enter the checked-out repository directory
                 dir("${env.WORKSPACE}/jenkins_pipeline") {
+                withCredentials([usernamePassword(credentialsId: 'AWS-Credentials', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
+                    sh """
+                        export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+                        export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+                    """
                     sh "ls -l" // List files in the repository directory.
                     sh "chmod +x abc.sh"
                     sh "./abc.sh" // Assuming abc.sh is in the repository, execute it.
                     }
+                  }
                 }
 
             post {
