@@ -5,7 +5,7 @@ set -e  # Exit immediately if a command exits with a non-zero status
  
 # Define Variables
 s3_bucket_name="pnc-trial"
-tarball="mismatch_hash_values.tar.gz"
+tarball="same_hash_values.tar.gz"
  
 # Step 1: Copy tar file from S3 bucket
 aws s3 cp s3://$s3_bucket_name/$tarball .
